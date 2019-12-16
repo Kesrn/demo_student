@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8">
+    <title>新增学生</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>新增学生</legend>
+</fieldset>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <form class="layui-form">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学生姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="stuname"  id="stuname" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="sex" value="0" title="男" checked>
+                            <input type="radio" name="sex" value="1" title="女">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">出生日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" name="birthdate" id="birthdate"
+                                   placeholder="yyyy-MM-dd" lay-verify="date" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">家庭地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="address"  id="address" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="button" class="layui-btn layui-btn-sm" id="btnCre">提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/layuiadmin/lib/jquery.js}"></script>
+<script th:src="@{/layuiadmin/layui/layui.js}"></script>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var table = layui.table
+            , $ = layui.$
+            , form = layui.form
+            , laydate = layui.laydate;
+
+
+        laydate.render({
+            elem: '#birthdate'
+        });
+
+        $('#btnCre').click(function () {
+            var stuname = $.trim($('#stuname').val());
+            var sex =$("input[name='sex']:checked").val();
+            var birthdate = $.trim($('#birthdate').val());
+            var address = $.trim($('#address').val());
+
+            if (stuname == '' || stuname == undefined) {
+                layer.alert('请填写姓名', {
+                    icon: 2
+                });
+                return;
+            }
+            if (sex == '' || sex == undefined) {
+                layer.alert('请选择性别', {
+                    icon: 2
+                });
+                return;
+            }
+            if (birthdate == '' || birthdate == undefined) {
+                layer.alert('请填写出生日期', {
+                    icon: 2
+                });
+                return;
+            }
+            if (address == '' || address == undefined) {
+                layer.alert('请填写家庭住址', {
+                    icon: 2
+                });
+                return;
+            }
+            var data = {
+                stuname: stuname,
+                sex: sex,
+                birthdate: birthdate,
+                address: address
+            };
+
+            $.ajax({
+                url: 'insert'
+                , type: 'post'
+                , data: data
+                , success: function (result) {
+                    if (result.code == 0) {
+                        layer.alert(result.msg,  {
+                            icon:1
+                        },function () {
+                            window.location.href = "/student"
+                        });
+
+                    } else {
+                        layer.alert(result.msg, {
+                            icon: 2
+                        });
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+
+
+</body>
+</html>
