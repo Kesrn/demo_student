@@ -91,6 +91,7 @@ public class ExcelController {
 
         //workbook将Excel写入到response的输出流中，供页面下载
         workbook.write(response.getOutputStream());
+        System.out.println("");
 
     }
     @RequestMapping("/inputExcel")
