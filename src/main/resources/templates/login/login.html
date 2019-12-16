@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<div th:replace="top :: header"></div>
+<body>
+
+<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+
+    <div class="layadmin-user-login-main">
+        <div class="layadmin-user-login-box layadmin-user-login-header">
+            <h2>廊坊市学生信息管理系统</h2>
+            <p>廊坊轩影科技有限公司</p>
+        </div>
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+
+            <div class="layui-bg-red" th:if="${errMsg != null}" th:text="${errMsg}"></div>
+
+            <form method="post" action="#" th:action="@{/login}">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
+                    <input type="text" name="username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+                    <input type="password" name="password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <!--<label for="validateCode" class="col-sm-4 control-label" style="font-size: 16px;"></label>-->
+                    <input type="text" style="width: 225px;display: inline-block;" class="form-control layui-input" id="validateCode" name="validateCode" placeholder="图形验证码">
+                    <img th:src="@{/getValidateCode}" id="validateCodeImg" style="cursor: pointer;float: right;height: 33px;" title="点击图片刷新" onclick="$(this).attr('src','/getValidateCode?'+new Date().getTime());">
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/layuiadmin/layui/jquery.min.js}"></script>
+<script th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: './layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use('index');
+    if(window.top != window.self){
+        top.location.href = location.href;
+    }
+</script>
+</body>
+</html>

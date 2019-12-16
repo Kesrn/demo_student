@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<div th:replace="top :: header"></div>
+
+<body>
+
+<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+
+    <div class="layadmin-user-login-main">
+        <div class="layadmin-user-login-box layadmin-user-login-header">
+            <h2>修改密码</h2>
+        </div>
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+            <form method="post" th:action="@{/resetPwdok}" name="demo1" class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" ></label>
+                    <input type="password" name="pwold" id="LAY-user-login-usernameold" lay-verify="required"  placeholder="原密码" class="layui-input" >
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" ></label>
+                    <input type="password" name="pwnew" id="LAY-user-login-passwordnew" lay-verify="required" placeholder="新密码" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password" ></label>
+                    <input type="password" name="pwconf" id="LAY-user-login-passwordconf" lay-verify="required" placeholder="确认密码" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit  lay-filter="demo1">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="/layuiadmin/lib/jquery.js"></script>
+<script th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: './layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use('index');
+
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            if(data.field.pwnew.length < 8 || data.field.pwnew.length > 16){
+                alert("密码长度应为8-16个字符");
+                return false;
+            }
+            if(data.field.pwnew != data.field.pwconf){
+            //if($(".LAY-user-login-passwordnew").val() != $(".LAY-user-login-passwordnew").val()){
+                alert("两次密码不一致");
+                return false;
+
+            }
+            $.post("/resetPwdok",{pwnew:data.field.pwnew,pwold:data.field.pwold},
+                function(data){
+                    alert(data.msg);
+                    if(data.code == 0){
+                        top.location.href = "/logout";
+                    }
+                },
+                "json");
+            return false;
+        });
+    });
+
+    //if(document.getElementsByName("pwnew").values() == document.getElementsByName("pwconf").values())
+
+</script>
+</body>
+</html>
